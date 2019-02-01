@@ -14,15 +14,15 @@ namespace Assaignment2
             accounts = new List<Account>();
         }
 
-        public Account findAccount(string name)
+        public Account findAccount(int accNum)
         {
-            Account mask = new Account(name);
-            return accounts.Find(acc => acc.Equals(name));
+            Account mask = new Account(accNum);
+            return accounts.Find(acc => acc.Equals(accNum));
         }
 
-        public Boolean updateBalance(string name, ref float transaction, out string error)
+        public Boolean updateBalance(int accNum, ref float transaction, out string error)
         {
-            Account acc = findAccount(name);
+            Account acc = findAccount(accNum);
             if (acc == null)
             {
                 error = "Account not found!!!";
@@ -30,6 +30,11 @@ namespace Assaignment2
             }
             else
             {
+                if(acc.Balance + transaction < 0)
+                {
+                    error = "Insuficient funds!!!";
+                    return false;
+                }
                 acc.Balance = acc.Balance + transaction;
                 transaction = 0;
                 error = "";
@@ -37,9 +42,9 @@ namespace Assaignment2
             }
         }
 
-        public Boolean updateName(ref string name, string newName, out string error)
+        public Boolean updateName(int accNum, string newName, out string error)
         {
-            Account acc = findAccount(name);
+            Account acc = findAccount(accNum);
             if (acc == null)
             {
                 error = "Account not found!!!";
@@ -53,23 +58,36 @@ namespace Assaignment2
             }
         }
 
-        public Boolean createAccount(string name)
+        public int createAccount(string name)
         {
-            try
-            {
-                accounts.Add(new Account(name));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
+            Account newAcc = new Account(name);
+            accounts.Add(newAcc);
+            return newAcc.AccountNum;
         }
 
-        public string accDetails(string name)
+        public string accDetails(int accNum)
         {
-            Account acc = findAccount(name);
-            return (string.Format("Account name: {0} \n Balance: {1}", acc.Name, acc.Balance));
+            Account acc = findAccount(accNum);
+            try
+            {
+            return (string.Format("Account name: {0} \nBalance: {1}\nAccount number: {2}", acc.Name, acc.Balance, acc.AccountNum));
+            }
+            catch (NullReferenceException)
+            {
+            return "Account: " +accNum +" doesn't exist!";
+            }
+        }
+
+        public int accLookup(string name)
+        {
+            foreach (Account acc in accounts)
+            {
+                if(acc.Name.Equals(name))
+                {
+                    return acc.AccountNum;
+                }
+            }
+            return 0;
         }
 
     }

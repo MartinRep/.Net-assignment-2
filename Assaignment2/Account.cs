@@ -8,12 +8,21 @@ namespace Assaignment2
     {
         private string name;
         private float balance;
-        private static int accNumber = 0;
+        private volatile static int accNum = 1;
+        private int accountNumber;
+
+        public Account (int accNum)
+        {
+            Name = "Search only account";
+            balance = 0;
+            accountNumber = accNum;
+        }
 
         public Account(string name)
         {
             this.name = name;
             balance = 0;
+            accountNumber = accNum++;
         }
         public string Name
         {
@@ -26,9 +35,19 @@ namespace Assaignment2
             set => balance = value;
         }
 
+        public int AccountNum
+        {
+            get => accountNumber;
+        }
+
         public bool Equals(Account other)
         {
-            return (name.Equals(other.Name) && balance.Equals(other.Balance));
+            return (name.Equals(other.Name) && balance.Equals(other.Balance) && accountNumber.Equals(other.AccountNum));
+        }
+
+        public bool Equals(int accNum)
+        {
+            return accNum.Equals(AccountNum);
         }
 
         public bool Equals(string name)
