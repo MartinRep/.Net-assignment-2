@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Assaignment2
 {
@@ -14,15 +13,34 @@ namespace Assaignment2
             accounts = new List<Account>();
         }
 
-        public Account findAccount(int accNum)
+        public int CreateAccount(string name)
         {
-            Account mask = new Account(accNum);
+            Account newAcc = new Account(name);
+            accounts.Add(newAcc);
+            return newAcc.AccountNum;
+        }
+
+        public Account FindAccount(int accNum)
+        {
             return accounts.Find(acc => acc.Equals(accNum));
         }
 
-        public Boolean updateBalance(int accNum, ref float transaction, out string error)
+        public bool AccLookup(string name, ref int accNum)
         {
-            Account acc = findAccount(accNum);
+            foreach (Account acc in accounts)
+            {
+                if (acc.Name.Equals(name))
+                {
+                    accNum = acc.AccountNum;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool UpdateBalance(int accNum, ref float transaction, out string error)
+        {
+            Account acc = FindAccount(accNum);
             if (acc == null)
             {
                 error = "Account not found!!!";
@@ -42,9 +60,9 @@ namespace Assaignment2
             }
         }
 
-        public Boolean updateName(int accNum, string newName, out string error)
+        public bool UpdateName(int accNum, string newName, out string error)
         {
-            Account acc = findAccount(accNum);
+            Account acc = FindAccount(accNum);
             if (acc == null)
             {
                 error = "Account not found!!!";
@@ -58,37 +76,20 @@ namespace Assaignment2
             }
         }
 
-        public int createAccount(string name)
+        public bool AccDetails(int accNum, ref string accDetails, out string error)
         {
-            Account newAcc = new Account(name);
-            accounts.Add(newAcc);
-            return newAcc.AccountNum;
-        }
-
-        public string accDetails(int accNum)
-        {
-            Account acc = findAccount(accNum);
+            Account acc = FindAccount(accNum);
             try
             {
-            return (string.Format("Account name: {0} \nBalance: {1}\nAccount number: {2}", acc.Name, acc.Balance, acc.AccountNum));
+                accDetails = acc.ToString();
+                error = "";
+                return true;
             }
             catch (NullReferenceException)
             {
-            return "Account: " +accNum +" doesn't exist!";
+                error = "Account: " +accNum +" doesn't exist!";
+                return false;
             }
         }
-
-        public int accLookup(string name)
-        {
-            foreach (Account acc in accounts)
-            {
-                if(acc.Name.Equals(name))
-                {
-                    return acc.AccountNum;
-                }
-            }
-            return 0;
-        }
-
     }
 }

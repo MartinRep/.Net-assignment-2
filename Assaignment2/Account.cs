@@ -1,48 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Assaignment2
 {
     class Account : IEquatable<Account>
     {
-        private string name;
-        private float balance;
-        private volatile static int accNum = 1;
-        private int accountNumber;
-
-        public Account (int accNum)
-        {
-            Name = "Search only account";
-            balance = 0;
-            accountNumber = accNum;
-        }
+        private volatile static int accounts = 1;
 
         public Account(string name)
         {
-            this.name = name;
-            balance = 0;
-            accountNumber = accNum++;
+            Name = name;
+            Balance = 0;
+            AccountNum = accounts++;
         }
-        public string Name
-        {
-            get => name;
-            set => name = value;
-        }
-        public float Balance
-        {
-            get => balance;
-            set => balance = value;
-        }
-
-        public int AccountNum
-        {
-            get => accountNumber;
-        }
+        public string Name { get; set; }
+        public float Balance { get; set; }
+        public int AccountNum { get; }
+        public int Accounts { get; }
 
         public bool Equals(Account other)
         {
-            return (name.Equals(other.Name) && balance.Equals(other.Balance) && accountNumber.Equals(other.AccountNum));
+            return (Name.Equals(other.Name) && Balance.Equals(other.Balance) && AccountNum.Equals(other.AccountNum));
         }
 
         public bool Equals(int accNum)
@@ -54,5 +32,8 @@ namespace Assaignment2
         {
             return name.Equals(Name);
         }
+
+        override public string ToString() => string.Format("\n************\nAccount name: {0} \nBalance: {1}\nAccount number: {2}\n************\n", Name, Balance, AccountNum);
+
     }
 }

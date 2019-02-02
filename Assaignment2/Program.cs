@@ -6,38 +6,54 @@ namespace Assaignment2
     {
         static void Main(string[] args)
         {
-            Bank bank = new Bank();
             string error;
-            float value = 150;
+            float lodgement, withdraw;
+            Bank bank = new Bank();
             int [] accountNumber = new int[255];
-            accountNumber[0] = bank.createAccount("Martin 0");
-            accountNumber[1] = bank.createAccount("Martin 1");
-            accountNumber[2] = bank.createAccount("Martin 2");
-            accountNumber[3] = bank.createAccount("Martin the third");
+            string accDetails = "";
 
-            Console.WriteLine(bank.accDetails(accountNumber[3]));
+            accountNumber[0] = bank.CreateAccount("Martin 0");
+            accountNumber[1] = bank.CreateAccount("Martin 1");
+            accountNumber[2] = bank.CreateAccount("Martin 2");
+            accountNumber[3] = bank.CreateAccount("Martin the third");
 
-            Console.WriteLine("Value before ref method call: " + value);
-            bank.updateBalance(accountNumber[3], ref value, out error);
-            Console.WriteLine("Value after ref method call: " + value);
-            Console.WriteLine("Error: " + error);
+            if (bank.AccDetails(accountNumber[3], ref accDetails, out error)) Console.WriteLine(accDetails);
+            else Console.WriteLine("Error: " + error);
 
-            bank.updateName(accountNumber[3], "Martin Repicky", out error);
-            Console.WriteLine("Error: " + error);
-            Console.WriteLine(bank.accDetails(accountNumber[3]));
+            lodgement = 150;
+            Console.WriteLine("Value before ref method call: " + lodgement);
+            if(bank.UpdateBalance(accountNumber[3], ref lodgement, out error)) Console.WriteLine("Value after ref method call: " + lodgement);
+            else Console.WriteLine("Error: " + error);
 
-            accountNumber[10] = bank.accLookup("Martin 2");
-            Console.WriteLine(bank.accDetails(accountNumber[10]));
+            if(bank.UpdateName(accountNumber[3], "Martin Repicky", out error))
+            {
+                if (bank.AccDetails(accountNumber[3], ref accDetails, out error)) Console.WriteLine(accDetails);
+                else Console.WriteLine("Error: " + error);
+            }
+            else Console.WriteLine("Error: " + error);
 
-            value = 150;
-            bank.updateBalance(accountNumber[10], ref value, out error);
-            Console.WriteLine("Error: " + error);
-            Console.WriteLine(bank.accDetails(accountNumber[10]));
+            if (bank.AccLookup("Martin 2", ref accountNumber[10]))
+            {
+                if (bank.AccDetails(accountNumber[10], ref accDetails, out error)) Console.WriteLine(accDetails);
+                else Console.WriteLine("Error: " + error);
+            }
+            else Console.WriteLine("Error: " + error);
 
-            value = -200;
-            bank.updateBalance(accountNumber[10], ref value, out error);
-            Console.WriteLine("Error: " + error);
-            Console.WriteLine(bank.accDetails(accountNumber[10]));
+            lodgement = 100;
+            if (bank.UpdateBalance(accountNumber[10], ref lodgement, out error))
+            {
+                if (bank.AccDetails(accountNumber[10], ref accDetails, out error)) Console.WriteLine(accDetails);
+                else Console.WriteLine("Error: " + error);
+            }
+            else Console.WriteLine("Error: " + error);
+
+            withdraw = -200;
+            if(bank.UpdateBalance(accountNumber[10], ref withdraw, out error))
+            {
+                if (bank.AccDetails(accountNumber[10], ref accDetails, out error)) Console.WriteLine(accDetails);
+                else Console.WriteLine("Error: " + error);
+            }
+            else Console.WriteLine("Error: " + error);
         }
     }
 }
