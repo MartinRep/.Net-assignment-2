@@ -5,7 +5,7 @@ namespace Assaignment2
 {
     class Account : IEquatable<Account>
     {
-        private volatile static int accounts = 1;
+        private volatile static float accounts = 1;
 
         public Account(string name)
         {
@@ -15,15 +15,15 @@ namespace Assaignment2
         }
         public string Name { get; set; }
         public float Balance { get; set; }
-        public int AccountNum { get; }
-        public int Accounts { get; }
+        public float AccountNum { get; }
+        public float Accounts { get; }
 
         public bool Equals(Account other)
         {
             return (Name.Equals(other.Name) && Balance.Equals(other.Balance) && AccountNum.Equals(other.AccountNum));
         }
 
-        public bool Equals(int accNum)
+        public bool Equals(float accNum)
         {
             return accNum.Equals(AccountNum);
         }

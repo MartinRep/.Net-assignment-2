@@ -7,25 +7,24 @@ namespace Assaignment2
     {
         private List<Account> accounts;
 
-
         public Bank()
         {
             accounts = new List<Account>();
         }
 
-        public int CreateAccount(string name)
+        public float CreateAccount(string name)
         {
             Account newAcc = new Account(name);
             accounts.Add(newAcc);
             return newAcc.AccountNum;
         }
 
-        public Account FindAccount(int accNum)
+        public Account FindAccount(float accNum)
         {
             return accounts.Find(acc => acc.Equals(accNum));
         }
 
-        public bool AccLookup(string name, ref int accNum)
+        public bool AccLookup(string name, ref float accNum)
         {
             foreach (Account acc in accounts)
             {
@@ -38,19 +37,14 @@ namespace Assaignment2
             return false;
         }
 
-        public bool UpdateBalance(int accNum, ref float transaction, out string error)
+        public bool UpdateBalance(float accNum, ref float transaction, out string error)
         {
-            Account acc = FindAccount(accNum);
-            if (acc == null)
+            try
             {
-                error = "Account not found!!!";
-                return false;
-            }
-            else
-            {
-                if(acc.Balance + transaction < 0)
+                Account acc = FindAccount(accNum);
+                if (acc.Balance + transaction < 0)
                 {
-                    error = "Insuficient funds!!!";
+                    error = string.Format("Insuficient funds! Cannot withdraw: {0} from balance: {1}", transaction, acc.Balance);
                     return false;
                 }
                 acc.Balance = acc.Balance + transaction;
@@ -58,30 +52,33 @@ namespace Assaignment2
                 error = "";
                 return true;
             }
-        }
-
-        public bool UpdateName(int accNum, string newName, out string error)
-        {
-            Account acc = FindAccount(accNum);
-            if (acc == null)
+            catch (NullReferenceException)
             {
                 error = "Account not found!!!";
                 return false;
             }
-            else
+        }
+
+        public bool UpdateName(float accNum, string newName, out string error)
+        {
+            try
             {
-                acc.Name = newName;
+                FindAccount(accNum).Name = newName;
                 error = "";
                 return true;
             }
+            catch (NullReferenceException)
+            {
+                error = "Account not found!!!";
+                return false;
+            }
         }
 
-        public bool AccDetails(int accNum, ref string accDetails, out string error)
+        public bool AccDetails(float accNum, ref string accDetails, out string error)
         {
-            Account acc = FindAccount(accNum);
             try
             {
-                accDetails = acc.ToString();
+                accDetails = FindAccount(accNum).ToString();
                 error = "";
                 return true;
             }
